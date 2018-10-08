@@ -23,19 +23,18 @@ import java.util.concurrent.TimeUnit;
  * For any other use cases please see the basic template at https://github.com/PerfectoCode/Templates.
  * For more programming samples and updated templates refer to the Perfecto Documentation at: http://developers.perfectomobile.com/
  */
-public class Sample02 {
+public class Sample01_Wikipedia {
 
     public static void main(String[] args) throws IOException {
         System.out.println("Run started");
         String browserName = "mobileOS";
         DesiredCapabilities capabilities = new DesiredCapabilities(browserName, "", Platform.ANY);
-        String host = "MYHOST.perfectomobile.com";
-        capabilities.setCapability("user", "yaronw@perfectomobile.com");
-        capabilities.setCapability("password", "Aa562041!");
+        String host = "MYCLOUD.perfectomobile.com";
+        capabilities.setCapability("user", "MYUSER");
+        capabilities.setCapability("password", "MYPASSWORD");
 
         //TODO: Change your device ID
         capabilities.setCapability("platformName", "Android");
-
         // Use the automationName capability to define the required framework - Appium (this is the default) or PerfectoMobile.
         // capabilities.setCapability("automationName", "PerfectoMobile");
 
@@ -43,7 +42,7 @@ public class Sample02 {
         PerfectoLabUtils.setExecutionIdCapability(capabilities, host);
 
         // Name your script
-         capabilities.setCapability("scriptName", "Test user agent");
+         capabilities.setCapability("scriptName", "Check term in wikipedia");
 
         RemoteWebDriver driver = new RemoteWebDriver(new URL("https://" + host + "/nexperience/perfectomobile/wd/hub"), capabilities);
         driver.manage().timeouts().implicitlyWait(15, TimeUnit.SECONDS);
@@ -53,8 +52,7 @@ public class Sample02 {
 
         PerfectoExecutionContext perfectoExecutionContext = new PerfectoExecutionContext.PerfectoExecutionContextBuilder()
                 .withProject(new Project("Perfecto Training", "1.0"))
-                .withJob(new Job("Browser Agent", 45))
-                .withContextTags("browser","user-agent","core")
+                .withContextTags("wiki","training","core")
                 .withWebDriver(driver)
                 .build();
         ReportiumClient reportiumClient = new ReportiumClientFactory().createPerfectoReportiumClient(perfectoExecutionContext);
@@ -62,28 +60,35 @@ public class Sample02 {
 
         try {
 
-            reportiumClient.testStart("User Agent Test", new TestContext("android"));
+            reportiumClient.testStart("Wiki test", new TestContext("android"));
             reportiumClient.stepStart("open website");
-            driver.get("p28686-309-5315.s309.upress.link/");
-            Map<String, Object> params = new HashMap<>();
-            params.put("content", "Training Website");
-            params.put("timeout",20);
-            String res = (String)driver.executeScript("mobile:checkpoint:text", params);
+                driver.get("www.wikipedia.org");
+                Map<String, Object> params = new HashMap<>();
+                params.put("content", "The Free Encyclopedia");
+                params.put("timeout",20);
+                String res = (String)driver.executeScript("mobile:checkpoint:text", params);
 
-            if (res.equalsIgnoreCase("true")) {
-            } else { reportiumClient.reportiumAssert("homepage loaded", false); }
+                if (res.equalsIgnoreCase("true")) {
+                } else { reportiumClient.reportiumAssert("homepage loaded", false); }
             reportiumClient.stepEnd();
-            reportiumClient.stepStart("navigate to agent page");
+            reportiumClient.stepStart("search term");
 
-                driver.findElementByXPath("//*[@class=\"mobile-menu\"]").click();
+                driver.findElementByXPath("//*[@id='searchInput']").sendKeys("apple");
+                Thread.sleep(4000);
 
+                driver.findElementByXPath("//*[@class=\"pure-button pure-button-primary-progressive\"]").click();
+                Thread.sleep(4000);
                 Map<String, Object> params2 = new HashMap<>();
-                params2.put("label", "Agent");
-                params2.put("timeout", 20);
-                driver.executeScript("mobile:button-text:click", params2);
+                params2.put("content", "fruit");
+                params2.put("timeout",20);
+                String res2 = (String)driver.executeScript("mobile:checkpoint:text", params2);
 
-                String t = driver.findElementByXPath("//*[text()=\"The User Agent\"]").getText();
-                System.out.println(t);
+                if (res2.equalsIgnoreCase("true")) {
+                } else { reportiumClient.reportiumAssert("search term loaded", false); }
+
+
+            reportiumClient.stepEnd();
+
 
             reportiumClient.testStop(TestResultFactory.createSuccess());
         } catch (Exception e) {

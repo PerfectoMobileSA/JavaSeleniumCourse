@@ -29,10 +29,9 @@ public class Sample02 {
         System.out.println("Run started");
         String browserName = "mobileOS";
         DesiredCapabilities capabilities = new DesiredCapabilities(browserName, "", Platform.ANY);
-        String host = "MYHOST.perfectomobile.com";
-        capabilities.setCapability("user", "yaronw@perfectomobile.com");
-        capabilities.setCapability("password", "Aa562041!");
-
+        String host = "MYCLOUD.perfectomobile.com";
+        capabilities.setCapability("user", "MYUSER");
+        capabilities.setCapability("password", "MYPASSWORD");
         //TODO: Change your device ID
         capabilities.setCapability("platformName", "Android");
 

@@ -23,7 +23,7 @@ import java.util.concurrent.TimeUnit;
  * For any other use cases please see the basic template at https://github.com/PerfectoCode/Templates.
  * For more programming samples and updated templates refer to the Perfecto Documentation at: http://developers.perfectomobile.com/
  */
-public class Sample02 {
+public class Sample02_UserAgent {
 
     public static void main(String[] args) throws IOException {
         System.out.println("Run started");

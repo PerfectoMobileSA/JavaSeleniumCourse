@@ -63,7 +63,7 @@ public class Sample02_UserAgent {
 
             reportiumClient.testStart("User Agent Test", new TestContext("android"));
             reportiumClient.stepStart("open website");
-            driver.get("p28686-309-5315.s309.upress.link/");
+            driver.get("training.perfecto.io");
             Map<String, Object> params = new HashMap<>();
             params.put("content", "Training Website");
             params.put("timeout",20);
